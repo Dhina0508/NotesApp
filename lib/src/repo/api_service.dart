@@ -51,7 +51,7 @@ class ApiService {
     }
   }
 
-  static Future deleteData(String id) async {
+  static Future<void> deleteData(String id) async {
     final response = await http.delete(
       Uri.parse("http://159.89.161.169:3001/api/user/notes/$id"),
       headers: {"Content-Type": "application/json"},

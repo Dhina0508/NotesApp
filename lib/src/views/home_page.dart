@@ -5,6 +5,7 @@ import 'package:notesapp/src/res/color_theme.dart';
 import 'package:notesapp/src/views/add_new_notes.dart';
 import 'package:notesapp/src/views/search_page.dart';
 import 'package:notesapp/src/views/view_notes.dart';
+import 'package:notesapp/src/views/widgets/info.dart';
 import 'package:notesapp/src/views/widgets/no_notes_found.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   bool isLoading = false;
+
   List<Color> colors = [
     const Color(0xffFD99FF),
     const Color(0xffFF9E9E),
@@ -84,17 +86,22 @@ class _HomepageState extends State<Homepage> {
           Center(
             child: Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: AppColor.liteblack),
-                child: const Center(
-                  child: Icon(
-                    Icons.info_outline,
-                    size: 24,
-                    color: Colors.white,
+              child: InkWell(
+                onTap: () {
+                  infoPopup(context);
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: AppColor.liteblack),
+                  child: const Center(
+                    child: Icon(
+                      Icons.info_outline,
+                      size: 24,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -104,7 +111,9 @@ class _HomepageState extends State<Homepage> {
       ),
       body: isLoading == true
           ? const Center(
-              child: CircularProgressIndicator(color: Colors.white,),
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
             )
           : RefreshIndicator(
               onRefresh: getData,
@@ -133,8 +142,10 @@ class _HomepageState extends State<Homepage> {
                                 ),
                                 onDismissed: (val) {
                                   ApiService.deleteData(
-                                      notes.nlm!.data![i].id.toString());
-                                  getData();
+                                          notes.nlm!.data![i].id.toString())
+                                      .then((value) {
+                                    getData();
+                                  });
                                 },
                                 key: const Key("value"),
                                 child: GestureDetector(
@@ -191,6 +202,22 @@ class _HomepageState extends State<Homepage> {
               ),
             )),
       ),
+    );
+  }
+
+  infoPopup(BuildContext context) {
+   
+
+    showDialog(
+      barrierColor: const Color.fromARGB(84, 130, 128, 128),
+      context: context,
+      builder: (BuildContext context) {
+        return  AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        backgroundColor: AppColor.apptheme,
+        content: Info());
+      },
     );
   }
 }

@@ -90,8 +90,7 @@ class _SearchPageState extends State<SearchPage> {
                             builder: (context) => ViewNotes(nm: suggestion)));
                   },
                 ),
-              )
-            
+              ),
             ],
           ),
         ),
